@@ -16,7 +16,7 @@ var (
 func init() {
 	botToken = os.Getenv("BOT_TOKEN")
 	if botToken == "" {
-		botToken = "NjkyMjY2NzE5Mzg4ODkzMjE0.Xn3v_Q.4frxm15Z1ejJ2YZkcTNGr5tpjJA"
+		botToken = "TOKEN NOT FOUND!!"
 	}
 }
 

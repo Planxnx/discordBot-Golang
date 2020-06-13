@@ -4,5 +4,5 @@
 
 ## Features
 - `go 1.14.4`
-- Play music from Youtube (in develop)
-- Retard reply !@#. (in develop)
+- Able to play music from Youtube (in develop)
+- Retard reply !@#.

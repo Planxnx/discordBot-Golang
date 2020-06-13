@@ -38,7 +38,7 @@ func main() {
 		return
 	}
 
-	discordSession.AddHandler(messages.HandleService)
+	go discordSession.AddHandler(messages.HandleService)
 
 	fmt.Println("Discord Bot is now running, Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)

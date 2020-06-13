@@ -16,7 +16,8 @@ var (
 func init() {
 	botToken = os.Getenv("BOT_TOKEN")
 	if botToken == "" {
-		botToken = "TOKEN NOT FOUND!!"
+		fmt.Println("BOT_TOKEN not found, Closing Now...")
+		os.Exit(0)
 	}
 }
 

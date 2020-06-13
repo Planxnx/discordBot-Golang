@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/Planxnx/discordBot-Golang/messages"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -36,6 +37,8 @@ func main() {
 		fmt.Println("Error: opening connection,\nMsg: ", err)
 		return
 	}
+
+	discordSession.AddHandler(messages.HandleService)
 
 	fmt.Println("Discord Bot is now running, Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)

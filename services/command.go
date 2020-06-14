@@ -20,7 +20,7 @@ func CommandService(s *discordgo.Session, m *discordgo.MessageCreate, botPrefix 
 	}
 
 	if strings.HasPrefix(m.Content, botPrefix+"help") {
-		go MessageSender(s, m.ChannelID, "ยังทำไม่เสร็จ กำลังทำอยู่ค้าบ")
+		go MessageSender(s, m.ChannelID, "ยังทำไม่เสร็จ กำลังทำอยู่ค้าบ\nช่วยผมทำได้นะค้าบ เริ่มขี้เกียจแล้ว\nPull Request มาที่ https://github.com/Planxnx/discordBot-Golang")
 	} else if strings.HasPrefix(m.Content, botPrefix+"join") {
 		go connectToVoiceChannel(s, m, guild)
 	} else {

@@ -5,9 +5,10 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
-	"github.com/Planxnx/discordBot-Golang/messages"
+	"github.com/Planxnx/discordBot-Golang/services"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -39,7 +40,7 @@ func main() {
 		return
 	}
 
-	discordSession.AddHandler(messages.HandleService)
+	discordSession.AddHandler(msgHandleService)
 
 	log.Println("Discord Bot is now running, Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)
@@ -48,4 +49,21 @@ func main() {
 
 	discordSession.Close()
 	log.Println("close down the Discord session")
+}
+
+func msgHandleService(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+	if m.Author.ID == s.State.User.ID {
+		return
+	}
+
+	botPrefix := os.Getenv("BOT_PREFIX")
+	if botPrefix == "" {
+		botPrefix = "~"
+	}
+
+	if strings.HasPrefix(m.Content, botPrefix) {
+		go services.CommandService(s, m, botPrefix)
+	}
+	go services.MessageService(s, m)
 }

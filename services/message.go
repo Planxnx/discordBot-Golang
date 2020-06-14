@@ -1,4 +1,4 @@
-package messages
+package services
 
 import (
 	"encoding/json"
@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Planxnx/discordBot-Golang/botcommands"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -19,26 +18,7 @@ type replyWordStruct struct {
 	KuyReply     []string `json:"kuyReply"`
 }
 
-// HandleService handle all of message event from the given channel.
-func HandleService(s *discordgo.Session, m *discordgo.MessageCreate) {
-
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
-	botPrefix := os.Getenv("BOT_PREFIX")
-	if botPrefix == "" {
-		botPrefix = "~"
-	}
-
-	if strings.HasPrefix(m.Content, botPrefix) {
-		go botcommands.HandleService(s, m, botPrefix)
-		return
-	}
-	go messageService(s, m)
-}
-
-func messageService(s *discordgo.Session, m *discordgo.MessageCreate) {
+func MessageService(s *discordgo.Session, m *discordgo.MessageCreate) {
 	messagesFile, err := os.Open("./data/messages.json")
 	if err != nil {
 		fmt.Println("Error at HandleService: opening messages.json,\nMsg: ", err)
@@ -50,9 +30,13 @@ func messageService(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if strings.Contains(m.Content, "ควย") {
 		wordNumber := rand.Intn(len(replyWord.KuyReply))
-		s.ChannelMessageSend(m.ChannelID, replyWord.KuyReply[wordNumber])
+		MessageSender(s, m.ChannelID, replyWord.KuyReply[wordNumber])
 	} else if strings.Contains(m.Content, "สัส") || strings.Contains(m.Content, "เหี้ย") || strings.Contains(m.Content, "หี") {
 		wordNumber := rand.Intn(len(replyWord.BadwordReply))
-		s.ChannelMessageSend(m.ChannelID, replyWord.BadwordReply[wordNumber])
+		MessageSender(s, m.ChannelID, replyWord.BadwordReply[wordNumber])
 	}
+}
+
+func MessageSender(s *discordgo.Session, channelID string, msg string) {
+	s.ChannelMessageSend(channelID, msg)
 }

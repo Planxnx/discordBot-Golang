@@ -32,10 +32,10 @@ func HandleService(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if strings.HasPrefix(m.Content, botPrefix) {
-		botcommands.HandleService(s, m, botPrefix)
+		go botcommands.HandleService(s, m, botPrefix)
 		return
 	}
-	messageService(s, m)
+	go messageService(s, m)
 }
 
 func messageService(s *discordgo.Session, m *discordgo.MessageCreate) {

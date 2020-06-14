@@ -1,4 +1,4 @@
-package messages
+package services
 
 import (
 	"encoding/json"
@@ -18,8 +18,7 @@ type replyWordStruct struct {
 	KuyReply     []string `json:"kuyReply"`
 }
 
-// HandleService handle a message from the given channel.
-func HandleService(s *discordgo.Session, m *discordgo.MessageCreate) {
+func MessageService(s *discordgo.Session, m *discordgo.MessageCreate) {
 	messagesFile, err := os.Open("./data/messages.json")
 	if err != nil {
 		fmt.Println("Error at HandleService: opening messages.json,\nMsg: ", err)
@@ -29,16 +28,15 @@ func HandleService(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var replyWord replyWordStruct
 	json.Unmarshal(replyWordByteValue, &replyWord)
 
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
 	if strings.Contains(m.Content, "ควย") {
 		wordNumber := rand.Intn(len(replyWord.KuyReply))
-		s.ChannelMessageSend(m.ChannelID, replyWord.KuyReply[wordNumber])
-	} else if strings.Contains(m.Content, "สัส") || strings.Contains(m.Content, "เหี้ย") || strings.Contains(m.Content, "มึง") {
+		MessageSender(s, m.ChannelID, replyWord.KuyReply[wordNumber])
+	} else if strings.Contains(m.Content, "สัส") || strings.Contains(m.Content, "เหี้ย") || strings.Contains(m.Content, "หี") {
 		wordNumber := rand.Intn(len(replyWord.BadwordReply))
-		s.ChannelMessageSend(m.ChannelID, replyWord.BadwordReply[wordNumber])
+		MessageSender(s, m.ChannelID, replyWord.BadwordReply[wordNumber])
 	}
+}
 
+func MessageSender(s *discordgo.Session, channelID string, msg string) {
+	s.ChannelMessageSend(channelID, msg)
 }

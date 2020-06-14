@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -24,27 +25,27 @@ func init() {
 
 func main() {
 
-	fmt.Println("Discord Session is starting with token '", botToken, "'")
+	log.Println("Discord Session is starting with token '", botToken, "'")
 
 	discordSession, err := discordgo.New("Bot " + botToken)
 	if err != nil {
-		fmt.Println("Error: creating Discord session,\nMsg: ", err)
+		log.Println("Error: creating Discord session,\nMsg: ", err)
 		return
 	}
 
 	err = discordSession.Open()
 	if err != nil {
-		fmt.Println("Error: opening connection,\nMsg: ", err)
+		log.Println("Error: opening connection,\nMsg: ", err)
 		return
 	}
 
 	discordSession.AddHandler(messages.HandleService)
 
-	fmt.Println("Discord Bot is now running, Press CTRL-C to exit")
+	log.Println("Discord Bot is now running, Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, os.Interrupt, syscall.SIGINT)
 	<-sc
 
 	discordSession.Close()
-	fmt.Println("close down the Discord session")
+	log.Println("close down the Discord session")
 }

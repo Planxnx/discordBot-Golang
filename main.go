@@ -8,7 +8,9 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/Planxnx/discordBot-Golang/data"
 	"github.com/Planxnx/discordBot-Golang/services"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -25,29 +27,29 @@ func init() {
 }
 
 func main() {
-
+	var err error
 	log.Println("Discord Session is starting with token '", botToken, "'")
 
-	discordSession, err := discordgo.New("Bot " + botToken)
+	data.DiscordSession, err = discordgo.New("Bot " + botToken)
 	if err != nil {
 		log.Println("Error: creating Discord session,\nMsg: ", err)
 		return
 	}
 
-	err = discordSession.Open()
+	err = data.DiscordSession.Open()
 	if err != nil {
 		log.Println("Error: opening connection,\nMsg: ", err)
 		return
 	}
 
-	discordSession.AddHandler(msgHandleService)
+	data.DiscordSession.AddHandler(msgHandleService)
 
 	log.Println("Discord Bot is now running, Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, os.Interrupt, syscall.SIGINT)
 	<-sc
 
-	discordSession.Close()
+	data.DiscordSession.Close()
 	log.Println("close down the Discord session")
 }
 

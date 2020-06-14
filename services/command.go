@@ -18,14 +18,13 @@ func CommandService(s *discordgo.Session, m *discordgo.MessageCreate, botPrefix 
 	if err != nil {
 		fmt.Println(err)
 	}
-	if strings.HasPrefix(m.Content, botPrefix+"help") {
-		MessageSender(s, m.ChannelID, "ยังทำไม่เสร็จ กำลังทำอยู่ค้าบ")
-	} else if strings.HasPrefix(m.Content, botPrefix+"join") {
-		connectToVoiceChannel(s, m, guild)
-	} else if strings.HasPrefix(m.Content, botPrefix+"play") {
 
+	if strings.HasPrefix(m.Content, botPrefix+"help") {
+		go MessageSender(s, m.ChannelID, "ยังทำไม่เสร็จ กำลังทำอยู่ค้าบ")
+	} else if strings.HasPrefix(m.Content, botPrefix+"join") {
+		go connectToVoiceChannel(s, m, guild)
 	} else {
-		MessageSender(s, m.ChannelID, botPrefix+"help เพื่อดูคำสั่งทั้งหมดนะค้าบ")
+		go MessageSender(s, m.ChannelID, botPrefix+"help เพื่อดูคำสั่งทั้งหมดนะค้าบ")
 	}
 }
 

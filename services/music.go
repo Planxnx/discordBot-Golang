@@ -1,5 +1,6 @@
 package services
 
+//PlayYoutube Service
 func PlayYoutube(link string, guild string, channel string) {
 	// video, err := ytdl.GetVideoInfo(link)
 

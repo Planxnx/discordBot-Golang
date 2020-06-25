@@ -1,1 +1,2 @@
-worker: discordBot-Golang
+worker: ./cmd/discord-planx-bot/
+

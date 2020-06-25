@@ -1,2 +1,2 @@
-worker: ./cmd/discord-planx-bot/
+worker: ./cmd/discord-planx-bot/main
 

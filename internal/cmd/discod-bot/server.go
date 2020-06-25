@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -9,6 +9,7 @@ import (
 
 	"github.com/Planxnx/discordBot-Golang/controller"
 	"github.com/Planxnx/discordBot-Golang/data"
+	"github.com/joho/godotenv"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -17,28 +18,27 @@ var (
 	botToken string
 )
 
-func init() {
+// RunServer runs discord bot server
+func RunServer() error {
+	err := godotenv.Load()
+	if err != nil {
+		return fmt.Errorf("Error: can't loading .env file")
+	}
+
 	botToken = os.Getenv("BOT_TOKEN")
 	if botToken == "" {
-		fmt.Println("BOT_TOKEN not found, Closing Now...")
-		os.Exit(0)
+		return fmt.Errorf("Error: BOT_TOKEN not found, Closing now")
 	}
-}
 
-func main() {
-	var err error
 	log.Println("Discord Session is starting with token '", botToken, "'")
-
 	data.DiscordSession, err = discordgo.New("Bot " + botToken)
 	if err != nil {
-		log.Println("Error: creating Discord session,\nMsg: ", err)
-		return
+		return fmt.Errorf("Error: creating Discord session, Message: '%s'", err)
 	}
 
 	err = data.DiscordSession.Open()
 	if err != nil {
-		log.Println("Error: opening connection,\nMsg: ", err)
-		return
+		return fmt.Errorf("Error: opening connection, Message: '%s'", err)
 	}
 
 	data.DiscordSession.AddHandler(controller.MessageHandler)
@@ -50,4 +50,5 @@ func main() {
 
 	data.DiscordSession.Close()
 	log.Println("close down the Discord session")
+	return nil
 }

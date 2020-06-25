@@ -9,8 +9,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// MessageService handle a only message event.
-func MessageService(s *discordgo.Session, m *discordgo.MessageCreate) {
+// MessageHandler handle a only message event.
+func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	replyWord := repository.GetRandomReplyWord()
 	if strings.Contains(m.Content, "ควย") || strings.Contains(m.Content, "8;p") {
 		wordNumber := rand.Intn(len(replyWord.KuyReply))

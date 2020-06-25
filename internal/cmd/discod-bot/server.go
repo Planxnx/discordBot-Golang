@@ -24,7 +24,7 @@ var (
 func RunServer() error {
 	err := godotenv.Load()
 	if err != nil {
-		return fmt.Errorf("Error: can't loading .env file")
+		log.Println("dotEnv: can't loading .env file")
 	}
 
 	botToken = os.Getenv("BOT_TOKEN")

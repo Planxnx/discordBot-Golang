@@ -4,7 +4,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var session *discordgo.Session
+var (
+	session     *discordgo.Session
+	voiceStatus = false
+)
 
 //NewSession new Discord session
 func NewSession(token string) error {
@@ -35,4 +38,14 @@ func CloseConnection() error {
 func SendMessageToChannel(channelID string, message string) error {
 	_, err := session.ChannelMessageSend(channelID, message)
 	return err
+}
+
+//VoiceStatusSwitch switch on/off voice channel
+func VoiceStatusSwitch() {
+	voiceStatus = !voiceStatus
+}
+
+//UpdateVoiceStatus update voice channel status
+func UpdateVoiceStatus(status bool) {
+	voiceStatus = status
 }

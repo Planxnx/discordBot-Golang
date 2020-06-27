@@ -68,9 +68,17 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if botPrefix == "" {
 		botPrefix = "~"
 	}
+	channel, err := s.State.Channel(m.ChannelID)
+	if err != nil {
+		fmt.Println(err)
+	}
+	guild, err := s.State.Guild(channel.GuildID)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	if strings.HasPrefix(m.Content, botPrefix) {
-		go controller.CommandHandler(s, m, botPrefix)
+		go controller.CommandHandler(s, m, guild, botPrefix)
 	}
-	go messagesController.MessageHandler(s, m)
+	go messagesController.MessageHandler(s, m, guild)
 }

@@ -5,7 +5,7 @@
 ### Features
 - `go 1.14.4`
 - Able to play music from Youtube (in develop)
-- Retard reply !@#.
+- Retard reply with sound and text !@#.
 
 ### Projects Architecture
 The projects architecture is designed by the Golang project layout and the clean architect guideline. You can read more information here.

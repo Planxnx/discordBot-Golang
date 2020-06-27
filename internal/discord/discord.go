@@ -4,13 +4,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//Session is discordgo.Session
-var Session *discordgo.Session
+var session *discordgo.Session
 
 //NewSession new Discord session
 func NewSession(token string) error {
 	var err error
-	Session, err = discordgo.New("Bot " + token)
+	session, err = discordgo.New("Bot " + token)
 	if err != nil {
 		return err
 	}
@@ -19,21 +18,21 @@ func NewSession(token string) error {
 
 //CreateConnection creates a websocket connection to Discord.
 func CreateConnection() error {
-	return Session.Open()
+	return session.Open()
 }
 
 //AddHandler add event handler
 func AddHandler(handler interface{}) {
-	Session.AddHandler(handler)
+	session.AddHandler(handler)
 }
 
 //CloseConnection closes a websocket and stops all listening/heartbeat goroutines.
 func CloseConnection() error {
-	return Session.Close()
+	return session.Close()
 }
 
 //SendMessageToChannel send message to the given channel id
 func SendMessageToChannel(channelID string, message string) error {
-	_, err := Session.ChannelMessageSend(channelID, message)
+	_, err := session.ChannelMessageSend(channelID, message)
 	return err
 }

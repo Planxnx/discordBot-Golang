@@ -9,7 +9,7 @@ type replyWordStruct struct {
 	KuyReply     []string `json:"kuyReply"`
 }
 
-// MessageSender .
+// MessageSender send message by given channel id
 func MessageSender(channelID string, msg string) {
-	discord.Session.ChannelMessageSend(channelID, msg)
+	discord.SendMessageToChannel(channelID, msg)
 }

@@ -33,24 +33,27 @@ func RunServer() error {
 	}
 
 	log.Println("Discord Session is starting with token '", botToken, "'")
-	discord.Session, err = discordgo.New("Bot " + botToken)
+	err = discord.NewSession(botToken)
 	if err != nil {
 		return fmt.Errorf("Error: creating Discord session, Message: '%s'", err)
 	}
 
-	err = discord.Session.Open()
+	err = discord.CreateConnection()
 	if err != nil {
 		return fmt.Errorf("Error: opening connection, Message: '%s'", err)
 	}
 
-	discord.Session.AddHandler(messageHandler)
+	discord.AddHandler(messageHandler)
 
 	log.Println("Discord Bot is now running, Press CTRL-C to exit")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, os.Interrupt, syscall.SIGINT)
 	<-sc
 
-	discord.Session.Close()
+	err = discord.CloseConnection()
+	if err != nil {
+		return fmt.Errorf("Error: closing connection, Message: '%s'", err)
+	}
 	log.Println("close down the Discord session")
 	return nil
 }

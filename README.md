@@ -13,3 +13,5 @@ The projects architecture is designed by the Golang project layout and the clean
         - Golang Project layout : https://github.com/golang-standards/project-layout
         - Clean Architecture : https://github.com/bxcodec/go-clean-arch
 
+### Notes
+- You must have ffmpeg in your path and Opus libs already installed.

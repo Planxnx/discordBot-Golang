@@ -11,6 +11,7 @@ require (
 	github.com/nareix/joy4 v0.0.0-20200507095837-05a4ffbb5369 // indirect
 	github.com/pilu/config v0.0.0-20131214182432-3eb99e6c0b9a // indirect
 	github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017 // indirect
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/slimsag/rand v0.0.0-20160325092440-f1e8d464c002 // indirect
 	github.com/xfrr/goffmpeg v0.0.0-20200624145540-fb3f88b1924e // indirect
 	layeh.com/gopus v0.0.0-20161224163843-0ebf989153aa // indirect

@@ -22,6 +22,8 @@ github.com/pilu/config v0.0.0-20131214182432-3eb99e6c0b9a/go.mod h1:9Or9aIl95Kp4
 github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017 h1:XXDLZIIt9NqdeIEva0DM+z1npM0Tsx6h5TYqwNvXfP0=
 github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017/go.mod h1:2LLTtftTZSdAPR/iVyennXZDLZOYzyDn+T0qEKJ8eSw=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/robfig/cron/v3 v3.0.0 h1:kQ6Cb7aHOHTSzNVNEhmp8EcWKLb4CbiMW9h9VyIhO4E=
+github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/slimsag/rand v0.0.0-20160325092440-f1e8d464c002 h1:sHjf8hoPsNXZrv5ifOcyLuUYf4qMdrr102VhHp1AoX4=
 github.com/slimsag/rand v0.0.0-20160325092440-f1e8d464c002/go.mod h1:58RVJZcio4fSOTHs4n5VWIJyP94NfJchgrk3rB5OZvE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

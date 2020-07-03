@@ -13,8 +13,8 @@ type ReplyWordStruct struct {
 	KuyReply     []string `json:"kuyReply"`
 }
 
-//GetRandomReplyWord return strings of bad word
-func GetRandomReplyWord() ReplyWordStruct {
+//GetBadWordList return list of bad word
+func GetBadWordList() ReplyWordStruct {
 	messagesFile, err := os.Open("./data/messages.json")
 	if err != nil {
 		fmt.Println("Error at HandleService: opening messages.json,\nMsg: ", err)

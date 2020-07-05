@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
@@ -18,7 +19,7 @@ func PlayYoutubeURL(url string, s *discordgo.Session, m *discordgo.MessageCreate
 		return
 	}
 
-	downloadURL, err := services.GetYoutubeDownloadURL(url)
+	youtubeInfo, err := services.GetYoutubeDownloadURL(url)
 	if err != nil {
 		log.Printf("Error: can't get youtube download url, Message: '%s'", err)
 		messageService.MessageSender(m.ChannelID, "หาเพลงไม่เจอค้าบ")
@@ -26,6 +27,8 @@ func PlayYoutubeURL(url string, s *discordgo.Session, m *discordgo.MessageCreate
 	}
 
 	discord.UpdateVoiceStatus(true)
-	voiceServices.PlayAudioFile(downloadURL, voiceConnection)
+	msg := fmt.Sprintf("กำลังจะเล่น '%s' นะค้าบ", youtubeInfo.Title)
+	messageService.MessageSender(m.ChannelID, msg)
+	voiceServices.PlayAudioFile(youtubeInfo.DownloadLink, voiceConnection)
 	discord.UpdateVoiceStatus(false)
 }

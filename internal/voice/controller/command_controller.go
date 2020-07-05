@@ -3,16 +3,9 @@ package controller
 import (
 	"log"
 
-	messageService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
 	"github.com/Planxnx/discordBot-Golang/internal/voice/services"
 	"github.com/bwmarrin/discordgo"
 )
-
-//StopVoice stop voice
-func StopVoice(m *discordgo.MessageCreate) {
-	services.StopVoice()
-	messageService.MessageSender(m.ChannelID, "หยุดเล่นแล้วค้าบ")
-}
 
 //PlayKuyVoice pen-kuy-rai sound
 func PlayKuyVoice(s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild) {

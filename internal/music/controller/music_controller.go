@@ -25,9 +25,7 @@ func PlayYoutubeURL(url string, s *discordgo.Session, m *discordgo.MessageCreate
 		return
 	}
 
-	voiceConnection, err := voiceServices.ConnectToVoiceChannel(s, m, guild, true)
-	if err != nil {
-		log.Printf("Error: connect to voice channel, Message: '%s'", err)
-	}
-	go voiceServices.PlayAudioFile(url, voiceConnection)
+	discord.UpdateVoiceStatus(true)
+	voiceServices.PlayAudioFile(downloadURL, voiceConnection)
+	discord.UpdateVoiceStatus(false)
 }

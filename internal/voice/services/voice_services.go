@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/Planxnx/discordBot-Golang/internal/discord"
 	messagesService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
 	"github.com/bwmarrin/dgvoice"
 	"github.com/bwmarrin/discordgo"
@@ -41,5 +42,7 @@ func PlayAudioFile(file string, voiceConnection *discordgo.VoiceConnection) {
 
 //StopVoice stop voice channel
 func StopVoice() {
-	stopChannel <- true
+	if discord.GetVoiceStatus() {
+		stopChannel <- true
+	}
 }

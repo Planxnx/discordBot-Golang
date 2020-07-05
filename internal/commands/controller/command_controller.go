@@ -13,7 +13,8 @@ import (
 //CommandHandler handle a command event.
 func CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild, botPrefix string) {
 	if strings.HasPrefix(m.Content, botPrefix+"help") {
-		go messageService.MessageSender(m.ChannelID, "ยังทำไม่เสร็จ กำลังทำอยู่ค้าบ\nช่วยผมทำได้นะค้าบ เริ่มขี้เกียจแล้ว\nPull Request มาที่ https://github.com/Planxnx/discordBot-Golang")
+		help := fmt.Sprintf("รายชื่อคำสั่ง\n%splay [Youtube Link] : เล่นเพลงจากยูทูป (ตอนนี้เล่นได้แค่ทีล่ะเพลง, ยังไม่สามารถค้นหาเพลงได้)\n%sstop : สั่งให้หยุดเล่นเพลง", botPrefix, botPrefix)
+		go messageService.MessageSender(m.ChannelID, help)
 	} else if strings.HasPrefix(m.Content, botPrefix+"join") {
 		go services.ConnectVoiceChannel(s, m, guild)
 	} else if strings.HasPrefix(m.Content, botPrefix+"stop") {

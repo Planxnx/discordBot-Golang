@@ -20,7 +20,8 @@ func CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, guild *dis
 		voiceController.PlayOKVoice(s, m, guild)
 		go voiceController.StopVoice(m)
 	} else if strings.HasPrefix(m.Content, botPrefix+"play") {
-		musicController.PlayYoutubeURL(s, m, guild)
+		var commandArgs []string = strings.Split(m.Content, " ")
+		musicController.PlayYoutubeURL(commandArgs[1], s, m, guild)
 	} else {
 		go messageService.MessageSender(m.ChannelID, botPrefix+"help เพื่อดูคำสั่งทั้งหมดนะค้าบ")
 	}

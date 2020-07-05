@@ -19,16 +19,20 @@ func PlayYoutubeURL(url string, s *discordgo.Session, m *discordgo.MessageCreate
 		return
 	}
 
+	if discord.GetVoiceStatus() {
+		messageService.MessageSender(m.ChannelID, "รอเพลงเล่นเสร็จก่อนแปปนึงนะค้าบ")
+		return
+	}
+
 	youtubeInfo, err := services.GetYoutubeDownloadURL(url)
 	if err != nil {
 		log.Printf("Error: can't get youtube download url, Message: '%s'", err)
 		messageService.MessageSender(m.ChannelID, "หาเพลงไม่เจอค้าบ")
 		return
 	}
-
-	discord.UpdateVoiceStatus(true)
 	msg := fmt.Sprintf("กำลังจะเล่น '%s' นะค้าบ", youtubeInfo.Title)
 	messageService.MessageSender(m.ChannelID, msg)
+	discord.UpdateVoiceStatus(true)
 	voiceServices.PlayAudioFile(youtubeInfo.DownloadLink, voiceConnection)
 	discord.UpdateVoiceStatus(false)
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/Planxnx/discordBot-Golang/internal/commands/services"
 	messageService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
+	musicController "github.com/Planxnx/discordBot-Golang/internal/music/controller"
 	voiceController "github.com/Planxnx/discordBot-Golang/internal/voice/controller"
 	"github.com/bwmarrin/discordgo"
 )
@@ -18,6 +19,8 @@ func CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, guild *dis
 	} else if strings.HasPrefix(m.Content, botPrefix+"stop") {
 		voiceController.PlayOKVoice(s, m, guild)
 		go voiceController.StopVoice(m)
+	} else if strings.HasPrefix(m.Content, botPrefix+"play") {
+		musicController.PlayYoutubeURL(s, m, guild)
 	} else {
 		go messageService.MessageSender(m.ChannelID, botPrefix+"help เพื่อดูคำสั่งทั้งหมดนะค้าบ")
 	}

@@ -4,7 +4,7 @@
 
 ### Features
 - `go 1.14.4`
-- Able to play music from Youtube (in develop)
+- Able to play music from Youtube (beta version)
 - Retard reply with sound and text !@#.
 
 ### Projects Architecture

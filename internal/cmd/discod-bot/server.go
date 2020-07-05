@@ -11,6 +11,7 @@ import (
 	"github.com/Planxnx/discordBot-Golang/internal/commands/controller"
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
 	messagesController "github.com/Planxnx/discordBot-Golang/internal/messages/controller"
+	voiceServices "github.com/Planxnx/discordBot-Golang/internal/voice/services"
 	"github.com/joho/godotenv"
 
 	"github.com/bwmarrin/discordgo"
@@ -43,6 +44,7 @@ func RunServer() error {
 		return fmt.Errorf("Error: opening connection, Message: '%s'", err)
 	}
 
+	voiceServices.InitVoiceChannel()
 	discord.AddHandler(messageHandler)
 
 	log.Println("Discord Bot is now running, Press CTRL-C to exit")
@@ -59,7 +61,7 @@ func RunServer() error {
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-
+	log.Println("Received Message Event!")
 	if m.Author.ID == s.State.User.ID {
 		return
 	}

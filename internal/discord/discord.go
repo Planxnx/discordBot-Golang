@@ -5,8 +5,8 @@ import (
 )
 
 var (
-	session     *discordgo.Session
-	voiceStatus = false
+	session        *discordgo.Session
+	voiceIsPlaying = false
 )
 
 //NewSession new Discord session
@@ -42,10 +42,15 @@ func SendMessageToChannel(channelID string, message string) error {
 
 //VoiceStatusSwitch switch on/off voice channel
 func VoiceStatusSwitch() {
-	voiceStatus = !voiceStatus
+	voiceIsPlaying = !voiceIsPlaying
 }
 
 //UpdateVoiceStatus update voice channel status
 func UpdateVoiceStatus(status bool) {
-	voiceStatus = status
+	voiceIsPlaying = status
+}
+
+//GetVoiceStatus update voice channel status
+func GetVoiceStatus() bool {
+	return voiceIsPlaying
 }

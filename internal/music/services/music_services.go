@@ -1,24 +1,37 @@
 package services
 
-//PlayYoutube Service
-func PlayYoutube(link string, guild string, channel string) {
-	// video, err := ytdl.GetVideoInfo(link)
+import (
+	"context"
+	"errors"
 
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return // Returning to avoid crash when video informations could not be found
-	// }
+	"github.com/Planxnx/discordBot-Golang/internal/music/model"
+	"github.com/rylio/ytdl"
+)
 
-	// for _, format := range video.Formats {
-	// 	if format.AudioEncoding == "opus" || format.AudioEncoding == "aac" || format.AudioEncoding == "vorbis" {
-	// 		data, err := video.GetDownloadURL(format)
-	// 		if err != nil {
-	// 			fmt.Println(err)
-	// 		}
-	// 		url := data.String()
-	// 		// go playAudioFile(url, guild, channel, "youtube")
-	// 		return
-	// 	}
-	// }
+//GetYoutubeDownloadURL return youtube download url
+func GetYoutubeDownloadURL(link string) (*model.Song, error) {
+	ctx := context.Background()
+	client := ytdl.DefaultClient
+	videoInfo, err := client.GetVideoInfo(ctx, link)
+	if err != nil {
+		return nil, err
+	}
 
+	for _, format := range videoInfo.Formats {
+		if format.AudioEncoding == "opus" || format.AudioEncoding == "aac" || format.AudioEncoding == "vorbis" {
+			data, err := client.GetDownloadURL(ctx, videoInfo, format)
+			if err != nil {
+				return nil, err
+			}
+			return &model.Song{
+				Title:        videoInfo.Title,
+				Link:         link,
+				DownloadLink: data.String(),
+				Duration:     videoInfo.Duration,
+				Uploader:     videoInfo.Uploader,
+				ThumbnailURL: videoInfo.GetThumbnailURL(ytdl.ThumbnailQualityHigh),
+			}, nil
+		}
+	}
+	return nil, errors.New("Audio format not found")
 }

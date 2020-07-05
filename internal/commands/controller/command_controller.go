@@ -15,7 +15,7 @@ import (
 //CommandHandler handle a command event.
 func CommandHandler(s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild, botPrefix string) {
 	if strings.HasPrefix(m.Content, botPrefix+"help") {
-		help := fmt.Sprintf("รายชื่อคำสั่ง\n%splay [Youtube Link] : เล่นเพลงจากยูทูป (ตอนนี้เล่นได้แค่ทีล่ะเพลง, ยังไม่สามารถค้นหาเพลงได้)\n%sstop : สั่งให้หยุดเล่นเพลง", botPrefix, botPrefix)
+		help := fmt.Sprintf("**รายชื่อคำสั่งนะจ้า (ยังไม่เสร็จ)**\n==============================\n`%splay [Youtube Link]` : เล่นเพลงจากยูทูป (ตอนนี้เล่นได้แค่ทีล่ะเพลง, ยังเสริชเพลงไม่ได้)\n`%sstop` : สั่งให้หยุดเล่นเพลง\n`%sjoin` : สั่งให้บอทเข้ามาในห้อง\n==============================\nถ้าเจอบัคฝากแจ้งหน่อยนะจ้า", botPrefix, botPrefix, botPrefix)
 		go messageService.MessageSender(m.ChannelID, help)
 	} else if strings.HasPrefix(m.Content, botPrefix+"join") {
 		go services.ConnectVoiceChannel(s, m, guild)

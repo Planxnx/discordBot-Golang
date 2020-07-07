@@ -32,7 +32,5 @@ func PlayYoutubeURL(url string, s *discordgo.Session, m *discordgo.MessageCreate
 	}
 	msg := fmt.Sprintf("กำลังจะเล่น '%s' นะค้าบ", youtubeInfo.Title)
 	messageService.MessageSender(m.ChannelID, msg)
-	discord.UpdateVoiceStatus(true)
 	voiceServices.PlayAudioFile(youtubeInfo.DownloadLink, voiceConnection)
-	discord.UpdateVoiceStatus(false)
 }

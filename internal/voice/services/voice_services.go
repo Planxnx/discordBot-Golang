@@ -37,7 +37,11 @@ func ConnectToVoiceChannel(s *discordgo.Session, m *discordgo.MessageCreate, gui
 
 //PlayAudioFile .
 func PlayAudioFile(file string, voiceConnection *discordgo.VoiceConnection) {
-	dgvoice.PlayAudioFile(voiceConnection, file, stopChannel)
+	defer discord.UpdateVoiceStatus(false) 
+	if !discord.GetVoiceStatus() {
+		discord.UpdateVoiceStatus(true)
+		dgvoice.PlayAudioFile(voiceConnection, file, stopChannel)
+	}
 }
 
 //StopVoice stop voice channel

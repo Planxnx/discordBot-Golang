@@ -61,7 +61,6 @@ func RunServer() error {
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	log.Println("Received Message Event!")
 	if m.Author.ID == s.State.User.ID {
 		return
 	}

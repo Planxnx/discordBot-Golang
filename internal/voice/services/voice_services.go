@@ -11,7 +11,6 @@ var stopChannel chan bool
 
 //InitVoiceChannel .
 func InitVoiceChannel() {
-	stopChannel = make(chan bool)
 }
 
 //FindVoiceChannelID find user channelId
@@ -37,11 +36,13 @@ func ConnectToVoiceChannel(s *discordgo.Session, m *discordgo.MessageCreate, gui
 
 //PlayAudioFile .
 func PlayAudioFile(file string, voiceConnection *discordgo.VoiceConnection) {
-	defer discord.UpdateVoiceStatus(false) 
 	if !discord.GetVoiceStatus() {
+		stopChannel = make(chan bool)
 		discord.UpdateVoiceStatus(true)
 		dgvoice.PlayAudioFile(voiceConnection, file, stopChannel)
+		close(stopChannel)
 	}
+	discord.UpdateVoiceStatus(false)
 }
 
 //StopVoice stop voice channel

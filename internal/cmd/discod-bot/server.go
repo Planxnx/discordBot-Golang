@@ -7,9 +7,12 @@ import (
 	"strings"
 
 	"github.com/Planxnx/discordBot-Golang/internal/commands/controller"
+	commandsProvider "github.com/Planxnx/discordBot-Golang/internal/commands/provider"
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
 	"github.com/Planxnx/discordBot-Golang/internal/logger"
 	messagesController "github.com/Planxnx/discordBot-Golang/internal/messages/controller"
+	messageProvider "github.com/Planxnx/discordBot-Golang/internal/messages/provider"
+	"github.com/Planxnx/discordBot-Golang/internal/routes"
 	"github.com/joho/godotenv"
 	"go.uber.org/fx"
 
@@ -29,11 +32,12 @@ func RunServer() error {
 
 	app := fx.New(
 		fx.Provide(logger.NewLogger),
-		fx.Invoke(discord.NewSession),
+		fx.Provide(discord.NewSession),
+		messageProvider.DeliveryModule,
+		commandsProvider.DeliveryModule,
+		routes.Module,
 	)
 	app.Run()
-
-	discord.AddHandler(messageHandler)
 
 	return nil
 }

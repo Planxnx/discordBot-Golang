@@ -14,7 +14,9 @@ var (
 )
 
 //Discord interface
-type Discord interface{}
+type Discord interface {
+	AddHandler(handler interface{})
+}
 
 type discordSession struct{}
 
@@ -38,7 +40,7 @@ func NewSession(logger *log.Logger) (Discord, error) {
 }
 
 //AddHandler add event handler
-func AddHandler(handler interface{}) {
+func (discordSession) AddHandler(handler interface{}) {
 	session.AddHandler(handler)
 }
 

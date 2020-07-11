@@ -1,6 +1,10 @@
 package discord
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -9,19 +13,28 @@ var (
 	voiceIsPlaying = false
 )
 
-//NewSession new Discord session
-func NewSession(token string) error {
-	var err error
-	session, err = discordgo.New("Bot " + token)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+//Discord interface
+type Discord interface{}
 
-//CreateConnection creates a websocket connection to Discord.
-func CreateConnection() error {
-	return session.Open()
+type discordSession struct{}
+
+//NewSession new Discord session
+func NewSession(logger *log.Logger) (Discord, error) {
+	botToken := os.Getenv("BOT_TOKEN")
+	if botToken == "" {
+		return nil, fmt.Errorf("Error: BOT_TOKEN not found, Closing now")
+	}
+
+	logger.Println("Discord Session is starting with token '", botToken, "'")
+	var err error
+	session, err = discordgo.New("Bot " + botToken)
+	if err != nil {
+		return nil, err
+	}
+	if err := session.Open(); err != nil {
+		return nil, err
+	}
+	return &discordSession{}, nil
 }
 
 //AddHandler add event handler

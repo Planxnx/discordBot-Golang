@@ -10,7 +10,7 @@ import (
 
 	"github.com/Planxnx/discordBot-Golang/internal/commands/services"
 	messageService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
-	musicController "github.com/Planxnx/discordBot-Golang/internal/music/controller"
+	musicUsecase "github.com/Planxnx/discordBot-Golang/internal/music/usecase"
 	voiceServices "github.com/Planxnx/discordBot-Golang/internal/voice/services"
 )
 
@@ -19,14 +19,18 @@ type Delivery interface {
 	GetCommandsHandler(*discordgo.Session, *discordgo.MessageCreate)
 }
 
-type commandsDelivery struct{}
-
-//NewCommandsDelivery new message delivery
-func NewCommandsDelivery() Delivery {
-	return &commandsDelivery{}
+type commandsDelivery struct {
+	musicUsecase musicUsecase.Usecase
 }
 
-func (commandsDelivery) GetCommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+//NewCommandsDelivery new message delivery
+func NewCommandsDelivery(mu musicUsecase.Usecase) Delivery {
+	return &commandsDelivery{
+		musicUsecase: mu,
+	}
+}
+
+func (cd commandsDelivery) GetCommandsHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
@@ -58,7 +62,7 @@ func (commandsDelivery) GetCommandsHandler(s *discordgo.Session, m *discordgo.Me
 	} else if strings.HasPrefix(m.Content, botPrefix+"play") {
 		var commandArgs []string = strings.Split(m.Content, " ")
 		if len(commandArgs) > 1 {
-			musicController.PlayYoutubeURL(commandArgs[1], s, m, guild)
+			cd.musicUsecase.PlayYoutubeURL(commandArgs[1], s, m, guild)
 		}
 	} else {
 		go messageService.MessageSender(m.ChannelID, botPrefix+"help เพื่อดูคำสั่งทั้งหมดนะค้าบ")

@@ -48,6 +48,5 @@ func (mu musicUsecase) PlayYoutubeURL(url string, s *discordgo.Session, m *disco
 	}
 	msg := fmt.Sprintf("กำลังจะเล่น '%s' นะค้าบ", youtubeInfo.Title)
 	messageService.MessageSender(m.ChannelID, msg)
-	log.Println("Playing!")
 	voiceServices.PlayAudioFile(youtubeInfo.DownloadLink, voiceConnection)
 }

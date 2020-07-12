@@ -8,6 +8,8 @@ import (
 	"github.com/Planxnx/discordBot-Golang/internal/logger"
 	messageProvider "github.com/Planxnx/discordBot-Golang/internal/messages/provider"
 	musicProvider "github.com/Planxnx/discordBot-Golang/internal/music/provider"
+	voiceProvider "github.com/Planxnx/discordBot-Golang/internal/voice/provider"
+
 	"github.com/Planxnx/discordBot-Golang/internal/routes"
 	youtubeProvider "github.com/Planxnx/discordBot-Golang/internal/youtube/provider"
 	"github.com/joho/godotenv"
@@ -28,6 +30,7 @@ func RunServer() error {
 	app := fx.New(
 		fx.Provide(logger.NewLogger),
 		fx.Provide(discord.NewSession),
+		voiceProvider.UsecaseModule,
 		youtubeProvider.UsecaseModule,
 		musicProvider.UsecaseModule,
 		messageProvider.DeliveryModule,

@@ -12,6 +12,7 @@ import (
 	messageService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
 	musicUsecase "github.com/Planxnx/discordBot-Golang/internal/music/usecase"
 	voiceServices "github.com/Planxnx/discordBot-Golang/internal/voice/services"
+	voiceUsecase "github.com/Planxnx/discordBot-Golang/internal/voice/usecase"
 )
 
 //Delivery interface
@@ -21,12 +22,14 @@ type Delivery interface {
 
 type commandsDelivery struct {
 	musicUsecase musicUsecase.Usecase
+	voiceUsecase voiceUsecase.Usecase
 }
 
 //NewCommandsDelivery new message delivery
-func NewCommandsDelivery(mu musicUsecase.Usecase) Delivery {
+func NewCommandsDelivery(mu musicUsecase.Usecase, vu voiceUsecase.Usecase) Delivery {
 	return &commandsDelivery{
 		musicUsecase: mu,
+		voiceUsecase: vu,
 	}
 }
 

@@ -7,6 +7,7 @@ import (
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
 	messageService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
 	voiceServices "github.com/Planxnx/discordBot-Golang/internal/voice/services"
+	voiceUsecase "github.com/Planxnx/discordBot-Golang/internal/voice/usecase"
 	youtubeUsecase "github.com/Planxnx/discordBot-Golang/internal/youtube/usecase"
 	"github.com/bwmarrin/discordgo"
 )
@@ -18,12 +19,14 @@ type Usecase interface {
 
 type musicUsecase struct {
 	youtubeUsecase youtubeUsecase.Usecase
+	voiceUsecase   voiceUsecase.Usecase
 }
 
 //NewMusicUsecase new message delivery
-func NewMusicUsecase(yu youtubeUsecase.Usecase) Usecase {
+func NewMusicUsecase(yu youtubeUsecase.Usecase, vu voiceUsecase.Usecase) Usecase {
 	return &musicUsecase{
 		youtubeUsecase: yu,
+		voiceUsecase:   vu,
 	}
 }
 
@@ -48,5 +51,5 @@ func (mu musicUsecase) PlayYoutubeURL(url string, s *discordgo.Session, m *disco
 	}
 	msg := fmt.Sprintf("กำลังจะเล่น '%s' นะค้าบ", youtubeInfo.Title)
 	messageService.MessageSender(m.ChannelID, msg)
-	voiceServices.PlayAudioFile(youtubeInfo.DownloadLink, voiceConnection)
+	mu.voiceUsecase.PlayAudioFile(youtubeInfo.DownloadLink, voiceConnection)
 }

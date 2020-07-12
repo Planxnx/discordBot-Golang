@@ -5,9 +5,8 @@ import (
 	"os"
 	"strings"
 
-	voiceController "github.com/Planxnx/discordBot-Golang/internal/voice/controller"
-
 	"github.com/Planxnx/discordBot-Golang/internal/messages/services"
+	voiceUsecase "github.com/Planxnx/discordBot-Golang/internal/voice/usecase"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -16,14 +15,18 @@ type Delivery interface {
 	GetMessageHandler(*discordgo.Session, *discordgo.MessageCreate)
 }
 
-type messageDelivery struct{}
-
-//NewMessageDelivery new message delivery
-func NewMessageDelivery() Delivery {
-	return &messageDelivery{}
+type messageDelivery struct {
+	voiceUsecase voiceUsecase.Usecase
 }
 
-func (messageDelivery) GetMessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+//NewMessageDelivery new message delivery
+func NewMessageDelivery(vu voiceUsecase.Usecase) Delivery {
+	return &messageDelivery{
+		voiceUsecase: vu,
+	}
+}
+
+func (md messageDelivery) GetMessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
@@ -42,7 +45,7 @@ func (messageDelivery) GetMessageHandler(s *discordgo.Session, m *discordgo.Mess
 
 	// go messagesController.MessageHandler(s, m, guild)
 	if strings.Contains(m.Content, "ควย") || strings.Contains(m.Content, "8;p") {
-		voiceController.PlayKuyVoice(s, m, guild)
+		go md.voiceUsecase.JoiAndPlayAudioFile("./sound/pen-kuy-rai.mp3", s, m, guild, false)
 		services.MessageSender(m.ChannelID, services.GetRandomKuyReplyWord())
 	} else if strings.Contains(m.Content, "สัส") || strings.Contains(m.Content, "เหี้ย") || strings.Contains(m.Content, "หี") {
 		services.MessageSender(m.ChannelID, services.GetRandomReplyWord())

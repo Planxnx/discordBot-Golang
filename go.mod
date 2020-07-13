@@ -17,5 +17,6 @@ require (
 	github.com/rylio/ytdl v0.6.3
 	github.com/slimsag/rand v0.0.0-20160325092440-f1e8d464c002 // indirect
 	github.com/xfrr/goffmpeg v0.0.0-20200624145540-fb3f88b1924e // indirect
+	go.uber.org/fx v1.13.0
 	layeh.com/gopus v0.0.0-20161224163843-0ebf989153aa // indirect
 )

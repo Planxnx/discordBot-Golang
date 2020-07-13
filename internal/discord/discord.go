@@ -25,6 +25,10 @@ type discordSession struct{}
 
 //NewSession new Discord session
 func NewSession(logger *log.Logger) (Discord, error) {
+	if session != nil {
+		return &discordSession{}, nil
+	}
+
 	botToken := os.Getenv("BOT_TOKEN")
 	if botToken == "" {
 		return nil, fmt.Errorf("Error: BOT_TOKEN not found, Closing now")

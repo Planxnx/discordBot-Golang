@@ -21,7 +21,7 @@ type voiceUsecase struct {
 	discord discord.Discord
 }
 
-//NewVoiceUsecase new message delivery
+//NewVoiceUsecase new voice usecase
 func NewVoiceUsecase(discord discord.Discord) Usecase {
 	return &voiceUsecase{
 		discord: discord,

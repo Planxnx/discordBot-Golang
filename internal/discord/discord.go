@@ -16,6 +16,7 @@ var (
 //Discord interface
 type Discord interface {
 	AddHandler(handler interface{})
+	SendMessageToChannel(string, string) error
 }
 
 type discordSession struct{}
@@ -50,7 +51,7 @@ func CloseConnection() error {
 }
 
 //SendMessageToChannel send message to the given channel id
-func SendMessageToChannel(channelID string, message string) error {
+func (discordSession) SendMessageToChannel(channelID string, message string) error {
 	_, err := session.ChannelMessageSend(channelID, message)
 	return err
 }

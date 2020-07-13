@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/Planxnx/discordBot-Golang/internal/discord"
 	"github.com/Planxnx/discordBot-Golang/internal/messages/services"
 	voiceUsecase "github.com/Planxnx/discordBot-Golang/internal/voice/usecase"
 	"github.com/bwmarrin/discordgo"
@@ -17,12 +18,14 @@ type Delivery interface {
 
 type messageDelivery struct {
 	voiceUsecase voiceUsecase.Usecase
+	discord      discord.Discord
 }
 
 //NewMessageDelivery new message delivery
-func NewMessageDelivery(vu voiceUsecase.Usecase) Delivery {
+func NewMessageDelivery(discord discord.Discord, vu voiceUsecase.Usecase) Delivery {
 	return &messageDelivery{
 		voiceUsecase: vu,
+		discord:      discord,
 	}
 }
 
@@ -43,11 +46,10 @@ func (md messageDelivery) GetMessageHandler(s *discordgo.Session, m *discordgo.M
 		log.Println(err)
 	}
 
-	// go messagesController.MessageHandler(s, m, guild)
 	if strings.Contains(m.Content, "ควย") || strings.Contains(m.Content, "8;p") {
 		go md.voiceUsecase.JoiAndPlayAudioFile("./sound/pen-kuy-rai.mp3", s, m, guild, false)
-		services.MessageSender(m.ChannelID, services.GetRandomKuyReplyWord())
+		md.discord.SendMessageToChannel(m.ChannelID, services.GetRandomKuyReplyWord())
 	} else if strings.Contains(m.Content, "สัส") || strings.Contains(m.Content, "เหี้ย") || strings.Contains(m.Content, "หี") {
-		services.MessageSender(m.ChannelID, services.GetRandomReplyWord())
+		md.discord.SendMessageToChannel(m.ChannelID, services.GetRandomReplyWord())
 	}
 }

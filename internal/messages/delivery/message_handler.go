@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
-	"github.com/Planxnx/discordBot-Golang/internal/messages/services"
+	messagesUsecase "github.com/Planxnx/discordBot-Golang/internal/messages/usecase"
 	voiceUsecase "github.com/Planxnx/discordBot-Golang/internal/voice/usecase"
 	"github.com/bwmarrin/discordgo"
 )
@@ -17,15 +17,17 @@ type Delivery interface {
 }
 
 type messageDelivery struct {
-	voiceUsecase voiceUsecase.Usecase
-	discord      discord.Discord
+	voiceUsecase    voiceUsecase.Usecase
+	discord         discord.Discord
+	messagesUsecase messagesUsecase.Usecase
 }
 
 //NewMessageDelivery new message delivery
-func NewMessageDelivery(discord discord.Discord, vu voiceUsecase.Usecase) Delivery {
+func NewMessageDelivery(discord discord.Discord, vu voiceUsecase.Usecase, mu messagesUsecase.Usecase) Delivery {
 	return &messageDelivery{
-		voiceUsecase: vu,
-		discord:      discord,
+		voiceUsecase:    vu,
+		discord:         discord,
+		messagesUsecase: mu,
 	}
 }
 
@@ -48,8 +50,8 @@ func (md messageDelivery) GetMessageHandler(s *discordgo.Session, m *discordgo.M
 
 	if strings.Contains(m.Content, "ควย") || strings.Contains(m.Content, "8;p") {
 		go md.voiceUsecase.JoiAndPlayAudioFile("./sound/pen-kuy-rai.mp3", s, m, guild, false)
-		md.discord.SendMessageToChannel(m.ChannelID, services.GetRandomKuyReplyWord())
+		md.discord.SendMessageToChannel(m.ChannelID, md.messagesUsecase.GetRandomKuyReplyWord())
 	} else if strings.Contains(m.Content, "สัส") || strings.Contains(m.Content, "เหี้ย") || strings.Contains(m.Content, "หี") {
-		md.discord.SendMessageToChannel(m.ChannelID, services.GetRandomReplyWord())
+		md.discord.SendMessageToChannel(m.ChannelID, md.messagesUsecase.GetRandomReplyWord())
 	}
 }

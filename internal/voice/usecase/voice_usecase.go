@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
-	"github.com/Planxnx/discordBot-Golang/internal/voice/services"
+	messagesService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
 	"github.com/bwmarrin/dgvoice"
 	"github.com/bwmarrin/discordgo"
 )
@@ -15,6 +15,8 @@ var stopChannel chan bool
 type Usecase interface {
 	PlayAudioFile(string, *discordgo.VoiceConnection)
 	JoiAndPlayAudioFile(string, *discordgo.Session, *discordgo.MessageCreate, *discordgo.Guild, bool)
+	ConnectToVoiceChannel(*discordgo.Session, *discordgo.MessageCreate, *discordgo.Guild, bool) (*discordgo.VoiceConnection, error)
+	StopVoice()
 }
 
 type voiceUsecase struct {
@@ -25,6 +27,13 @@ type voiceUsecase struct {
 func NewVoiceUsecase(discord discord.Discord) Usecase {
 	return &voiceUsecase{
 		discord: discord,
+	}
+}
+
+//StopVoice stop voice channel
+func (voiceUsecase) StopVoice() {
+	if discord.GetVoiceStatus() {
+		stopChannel <- true
 	}
 }
 
@@ -41,7 +50,7 @@ func (voiceUsecase) PlayAudioFile(file string, voiceConnection *discordgo.VoiceC
 
 //JoiAndPlayAudioFile return youtube download url
 func (voiceUsecase) JoiAndPlayAudioFile(file string, s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild, isMusicPlaying bool) {
-	voiceConnection, err := services.ConnectToVoiceChannel(s, m, guild, isMusicPlaying)
+	voiceConnection, err := connectToVoiceChannel(s, m, guild, isMusicPlaying)
 	if err != nil {
 		log.Printf("Error: connect to voice channel, Message: '%s'", err)
 	}
@@ -52,4 +61,27 @@ func (voiceUsecase) JoiAndPlayAudioFile(file string, s *discordgo.Session, m *di
 		close(stopChannel)
 		discord.UpdateVoiceStatus(false)
 	}
+}
+
+//ConnectToVoiceChannel connect to user voice channelId
+func (voiceUsecase) ConnectToVoiceChannel(s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild, isMusicPlaying bool) (*discordgo.VoiceConnection, error) {
+	return connectToVoiceChannel(s, m, guild, isMusicPlaying)
+}
+
+func findVoiceChannelID(guild *discordgo.Guild, m *discordgo.MessageCreate) string {
+	for _, voiceState := range guild.VoiceStates {
+		if voiceState.UserID == m.Author.ID {
+			return voiceState.ChannelID
+		}
+	}
+	return ""
+}
+func connectToVoiceChannel(s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild, isMustJoin bool) (voiceConnection *discordgo.VoiceConnection, err error) {
+	voiceChannelID := findVoiceChannelID(guild, m)
+	if voiceChannelID == "" && isMustJoin {
+		messagesService.MessageSender(m.ChannelID, "กรุณาเข้าห้องก่อนนะค้าบ")
+	}
+
+	voiceConnection, err = s.ChannelVoiceJoin(guild.ID, voiceChannelID, false, false)
+	return
 }

@@ -6,7 +6,6 @@ import (
 
 	"github.com/Planxnx/discordBot-Golang/internal/discord"
 	messageService "github.com/Planxnx/discordBot-Golang/internal/messages/services"
-	voiceServices "github.com/Planxnx/discordBot-Golang/internal/voice/services"
 	voiceUsecase "github.com/Planxnx/discordBot-Golang/internal/voice/usecase"
 	youtubeUsecase "github.com/Planxnx/discordBot-Golang/internal/youtube/usecase"
 	"github.com/bwmarrin/discordgo"
@@ -31,8 +30,7 @@ func NewMusicUsecase(yu youtubeUsecase.Usecase, vu voiceUsecase.Usecase) Usecase
 }
 
 func (mu musicUsecase) PlayYoutubeURL(url string, s *discordgo.Session, m *discordgo.MessageCreate, guild *discordgo.Guild) {
-
-	voiceConnection, err := voiceServices.ConnectToVoiceChannel(s, m, guild, true)
+	voiceConnection, err := mu.voiceUsecase.ConnectToVoiceChannel(s, m, guild, true)
 	if err != nil {
 		log.Printf("Error: connect to voice channel, Message: '%s'", err)
 		messageService.MessageSender(m.ChannelID, "มีปัญหาเข้าห้องไม่ได้ หรือ พูดไม่ได้จ้า")

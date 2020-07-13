@@ -30,6 +30,8 @@ func RunServer() error {
 	app := fx.New(
 		fx.Provide(logger.NewLogger),
 		fx.Provide(discord.NewSession),
+		messageProvider.RepositoryModule,
+		messageProvider.UsecaseModule,
 		voiceProvider.UsecaseModule,
 		youtubeProvider.UsecaseModule,
 		musicProvider.UsecaseModule,

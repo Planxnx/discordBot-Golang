@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	session        *discordgo.Session
+	instance       *discordSession
 	voiceIsPlaying = false
 )
 
@@ -21,7 +21,9 @@ type Discord interface {
 	OpenConnection() error
 }
 
-type discordSession struct{}
+type discordSession struct {
+	session *discordgo.Session
+}
 
 //NewSession new Discord session
 func NewSession(logger *log.Logger) (Discord, error) {
@@ -34,34 +36,37 @@ func NewSession(logger *log.Logger) (Discord, error) {
 		return nil, fmt.Errorf("Error: BOT_TOKEN not found, Closing now")
 	}
 
-	var err error
-	session, err = discordgo.New("Bot " + botToken)
+	session, err := discordgo.New("Bot " + botToken)
 	if err != nil {
 		return nil, err
 	}
 
-	return &discordSession{}, nil
+	instance = &discordSession{
+		session: session,
+	}
+
+	return instance, nil
 }
 
 //AddHandler add event handler
-func (discordSession) AddHandler(handler interface{}) {
-	session.AddHandler(handler)
+func (ds discordSession) AddHandler(handler interface{}) {
+	ds.session.AddHandler(handler)
 }
 
 //OpenConnection open a websocket and listening goroutines.
-func (discordSession) OpenConnection() error {
-	log.Println("Discord Session is starting with token '", session.Token, "'")
-	return session.Open()
+func (ds discordSession) OpenConnection() error {
+	log.Println("Discord Session is starting with token '", ds.session.Token, "'")
+	return ds.session.Open()
 }
 
 //CloseConnection closes a websocket and stops all listening/heartbeat goroutines.
-func (discordSession) CloseConnection() error {
-	return session.Close()
+func (ds discordSession) CloseConnection() error {
+	return ds.session.Close()
 }
 
 //SendMessageToChannel send message to the given channel id
-func (discordSession) SendMessageToChannel(channelID string, message string) error {
-	_, err := session.ChannelMessageSend(channelID, message)
+func (ds discordSession) SendMessageToChannel(channelID string, message string) error {
+	_, err := ds.session.ChannelMessageSend(channelID, message)
 	return err
 }
 

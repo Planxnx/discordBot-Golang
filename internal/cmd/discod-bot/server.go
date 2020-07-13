@@ -33,6 +33,9 @@ func registerHooks(lifecycle fx.Lifecycle, discord discord.Discord) {
 			},
 			OnStop: func(context.Context) error {
 				log.Print("Stopping server.")
+				if err := discord.CloseConnection(); err != nil {
+					log.Printf("%v\n", err)
+				}
 				return nil
 			},
 		},

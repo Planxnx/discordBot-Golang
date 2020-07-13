@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"log"
 
 	commandsProvider "github.com/Planxnx/discordBot-Golang/internal/commands/provider"
@@ -20,6 +21,24 @@ var (
 	botToken string
 )
 
+func registerHooks(lifecycle fx.Lifecycle, discord discord.Discord) {
+	lifecycle.Append(
+		fx.Hook{
+			OnStart: func(context.Context) error {
+				log.Print("Starting server.")
+				if err := discord.OpenConnection(); err != nil {
+					log.Printf("%v\n", err)
+				}
+				return nil
+			},
+			OnStop: func(context.Context) error {
+				log.Print("Stopping server.")
+				return nil
+			},
+		},
+	)
+}
+
 // RunServer runs discord bot server
 func RunServer() error {
 	err := godotenv.Load()
@@ -30,6 +49,7 @@ func RunServer() error {
 	app := fx.New(
 		fx.Provide(logger.NewLogger),
 		fx.Provide(discord.NewSession),
+		fx.Invoke(registerHooks),
 		messageProvider.RepositoryModule,
 		messageProvider.UsecaseModule,
 		voiceProvider.UsecaseModule,

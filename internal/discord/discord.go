@@ -18,6 +18,7 @@ type Discord interface {
 	AddHandler(handler interface{})
 	SendMessageToChannel(string, string) error
 	CloseConnection() error
+	OpenConnection() error
 }
 
 type discordSession struct{}
@@ -29,21 +30,24 @@ func NewSession(logger *log.Logger) (Discord, error) {
 		return nil, fmt.Errorf("Error: BOT_TOKEN not found, Closing now")
 	}
 
-	logger.Println("Discord Session is starting with token '", botToken, "'")
 	var err error
 	session, err = discordgo.New("Bot " + botToken)
 	if err != nil {
 		return nil, err
 	}
-	if err := session.Open(); err != nil {
-		return nil, err
-	}
+
 	return &discordSession{}, nil
 }
 
 //AddHandler add event handler
 func (discordSession) AddHandler(handler interface{}) {
 	session.AddHandler(handler)
+}
+
+//OpenConnection open a websocket and listening goroutines.
+func (discordSession) OpenConnection() error {
+	log.Println("Discord Session is starting with token '", session.Token, "'")
+	return session.Open()
 }
 
 //CloseConnection closes a websocket and stops all listening/heartbeat goroutines.

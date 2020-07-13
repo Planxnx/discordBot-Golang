@@ -17,6 +17,7 @@ var (
 type Discord interface {
 	AddHandler(handler interface{})
 	SendMessageToChannel(string, string) error
+	CloseConnection() error
 }
 
 type discordSession struct{}
@@ -46,7 +47,7 @@ func (discordSession) AddHandler(handler interface{}) {
 }
 
 //CloseConnection closes a websocket and stops all listening/heartbeat goroutines.
-func CloseConnection() error {
+func (discordSession) CloseConnection() error {
 	return session.Close()
 }
 

@@ -27,8 +27,8 @@ type discordSession struct {
 
 //NewSession new Discord session
 func NewSession(logger *log.Logger) (Discord, error) {
-	if session != nil {
-		return &discordSession{}, nil
+	if instance != nil {
+		return instance, nil
 	}
 
 	botToken := os.Getenv("BOT_TOKEN")
